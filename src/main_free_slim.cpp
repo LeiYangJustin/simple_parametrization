@@ -70,37 +70,45 @@ int main(int argc, char *argv[])
     igl::boundary_loop(F,bnd);
 
 
-    if (TC.rows() > 0 && init) {
-        std::cout << "Use obj parametrization as init" << std::endl;
+    // if (TC.rows() > 0 && init) {
+    //     std::cout << "Use obj parametrization as init" << std::endl;
 
-        // put all boundary
-        std::vector<int> idx;
-        for (int i = 0; i < TC.rows(); i++){
-            if (TC.row(i).squaredNorm() - 1.0 < 0.00001) {
-                idx.push_back(i);
-            }
-        }
+    //     // put all boundary
+    //     std::vector<int> idx;
+    //     for (int i = 0; i < TC.rows(); i++){
+    //         if (TC.row(i).squaredNorm() - 1.0 < 0.00001) {
+    //             idx.push_back(i);
+    //         }
+    //     }
 
-        bnd_uv.resize(idx.size(), 2);
-        uv_init.resize(TC.rows(), 2);
+    //     bnd_uv.resize(idx.size(), 2);
+    //     uv_init.resize(TC.rows(), 2);
 
-        for (int i = 0; i< idx.size(); i++) {
-            bnd_uv.row(i) = TC.row(idx[i]);
-        }
+    //     for (int i = 0; i< idx.size(); i++) {
+    //         bnd_uv.row(i) = TC.row(idx[i]);
+    //     }
 
-        for (int i = 0; i < TC.rows(); i++) {
-            uv_init.row(i) = TC.row(i);
-        }
+    //     for (int i = 0; i < TC.rows(); i++) {
+    //         uv_init.row(i) = TC.row(i);
+    //     }
 
-    } else {
-        std::cout << "Start from harmonic param" << std::endl;
+    // } else {
+    //     std::cout << "Start from harmonic param" << std::endl;
 
-        igl::map_vertices_to_circle(V,bnd,bnd_uv);
+    //     igl::map_vertices_to_circle(V,bnd,bnd_uv);
 
-        igl::harmonic(V,F,bnd,bnd_uv,1,uv_init);
-        if (igl::flipped_triangles(uv_init,F).size() != 0) {
-            igl::harmonic(F,bnd,bnd_uv,1,uv_init); // use uniform laplacian
-        }
+    //     igl::harmonic(V,F,bnd,bnd_uv,1,uv_init);
+    //     if (igl::flipped_triangles(uv_init,F).size() != 0) {
+    //         igl::harmonic(F,bnd,bnd_uv,1,uv_init); // use uniform laplacian
+    //     }
+    // }
+    std::cout << "Start from harmonic param" << std::endl;
+
+    igl::map_vertices_to_circle(V,bnd,bnd_uv);
+
+    igl::harmonic(V,F,bnd,bnd_uv,1,uv_init);
+    if (igl::flipped_triangles(uv_init,F).size() != 0) {
+        igl::harmonic(F,bnd,bnd_uv,1,uv_init); // use uniform laplacian
     }
 
 
